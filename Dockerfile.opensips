@@ -1,0 +1,29 @@
+FROM debian:buster
+MAINTAINER Igor Olhovskiy <igorolhovskiy@gmail.com>
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y gnupg2 && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B && \
+    echo "deb http://apt.opensips.org buster 3.0-releases" >/etc/apt/sources.list.d/opensips.list && \
+    apt-get update -qq && \
+    apt-get install -y opensips \
+                    opensips-b2bua-module \
+                    opensips-carrierroute-module \
+                    opensips-dialplan-module \
+                    opensips-http-modules \
+                    opensips-json-module \
+                    opensips-lua-module \
+                    opensips-mysql-module \
+                    opensips-presence-modules \
+                    opensips-regex-module \
+                    opensips-sqlite-module && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+VOLUME /etc/opensips
+
+EXPOSE 5060/udp
+
+ENTRYPOINT ["opensips", "-DD", "-E"]
