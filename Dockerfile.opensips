@@ -8,7 +8,10 @@ RUN apt-get update && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B && \
     echo "deb http://apt.opensips.org buster 3.0-releases" >/etc/apt/sources.list.d/opensips.list && \
     apt-get update -qq && \
-    apt-get install -y opensips \
+    apt-get install --assume-yes git \
+                    sngrep \
+                    netcat \
+                    opensips \
                     opensips-b2bua-module \
                     opensips-carrierroute-module \
                     opensips-dialplan-module \
@@ -18,12 +21,43 @@ RUN apt-get update && \
                     opensips-mysql-module \
                     opensips-presence-modules \
                     opensips-regex-module \
-                    opensips-sqlite-module && \
+                    opensips-sqlite-module \
+                    opensips-emergency-module \
+                    opensips-memcached-module \
+                    opensips-radius-modules \
+                    opensips-siprec-module \
+                    opensips-snmpstats-module \
+                    opensips-tls-module \
+                    opensips-wss-module \
+                    opensips-xmlrpc-module \
+                    opensips-dbhttp-module \
+                    opensips-identity-module \
+                    opensips-restclient-module \
+                    opensips-sctp-module \
+                    opensips-compression-module \
+                    python3 \
+                    python3-pip \
+                    python3-dev \
+                    gcc \
+                    default-libmysqlclient-dev && \
+    pip3 install mysqlclient \
+                    sqlalchemy \
+                    sqlalchemy-utils \
+                    pyOpenSSL && \
+    git clone https://github.com/opensips/opensips-cli ~/src/opensips-cli && \
+    cd ~/src/opensips-cli && \
+    python3 setup.py install clean && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 VOLUME /etc/opensips
 
-EXPOSE 5060/udp
+VOLUME ["/etc/opensips"]
 
-ENTRYPOINT ["opensips", "-DD", "-E"]
+EXPOSE 5060/udp
+EXPOSE 5060/tcp
+
+ADD docker-entrypoint-opensips.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
