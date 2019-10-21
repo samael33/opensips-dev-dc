@@ -1,3 +1,3 @@
-# kamailio-dev-dc
+# opensips-dev-dc
 
-Docker-compose file for developig for Kamailio and Asterisk as a backend helper
+Docker-compose file for developig for OpenSIPS and Asterisk as a backend helper
