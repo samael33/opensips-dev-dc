@@ -1,0 +1,63 @@
+FROM debian:buster
+MAINTAINER Igor Olhovskiy <igorolhovskiy@gmail.com>
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV RTPENGINE_VERSION mr8.0
+ENV BCG729_VERSION 1.0.4
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git \
+                dpkg-dev \
+                cmake \
+                unzip \
+                wget \
+                debhelper-compat \
+                default-libmysqlclient-dev \
+                gperf \
+                iptables-dev \
+                libavcodec-dev \
+                libavfilter-dev \
+                libavformat-dev \
+                libavutil-dev \
+                libbencode-perl \
+                libcrypt-openssl-rsa-perl \
+                libcrypt-rijndael-perl \
+                libcurl4-openssl-dev \
+                libdigest-crc-perl \
+                libdigest-hmac-perl \
+                libevent-dev libglib2.0-dev \
+                libhiredis-dev libio-multiplex-perl \
+                libio-socket-inet6-perl libiptc-dev \
+                libjson-glib-dev libnet-interface-perl \
+                libpcap0.8-dev \
+                libpcre3-dev \
+                libsocket6-perl \
+                libspandsp-dev \
+                libssl-dev \
+                libswresample-dev \
+                libsystemd-dev \
+                libxmlrpc-core-c3-dev \
+                markdown \
+                curl \
+                wget \
+                zlib1g-dev && \
+    cd /usr/src && \
+    curl https://codeload.github.com/BelledonneCommunications/bcg729/tar.gz/$BCG729_VERSION > bcg729_$BCG729_VERSION.orig.tar.gz && \
+    tar zxf bcg729_$BCG729_VERSION.orig.tar.gz && \
+    cd bcg729-$BCG729_VERSION && \
+    git clone https://github.com/ossobv/bcg729-deb.git debian && \
+    dpkg-buildpackage -us -uc -sa && \
+    cd /usr/src && \
+    dpkg -i *.deb && \
+    cd /usr/src && \
+    git clone -b $RTPENGINE_VERSION https://github.com/sipwise/rtpengine.git && \
+    cd rtpengine && \
+    dpkg-buildpackage && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/deb && \
+    mv /usr/src/*.deb /opt/deb
+
+VOLUME ["/opt/deb"]
