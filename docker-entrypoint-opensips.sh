@@ -1,6 +1,4 @@
 #!/bin/bash
 
-# Wait for database to start
-until $(nc -z db 3306); do { printf '.'; sleep 1; }; done
-# Start Kamailio
+# Start OpenSIPS
 /usr/sbin/opensips -DD -E

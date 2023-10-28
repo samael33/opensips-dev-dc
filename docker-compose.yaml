@@ -2,44 +2,10 @@ version: "3"
 
 services:
   opensips:
-    image: opensips:test
+    image: opensips:webrtc
     build:
       context: .
       dockerfile: Dockerfile.opensips
     volumes:
       - ./opensips:/etc/opensips
-    ports:
-      - "5060:5060/tcp"
-      - "5060:5060/udp"
-    networks:
-      main:
-        aliases:
-          - opensips
-    depends_on:
-      - db
-  
-  asterisk:
-    image: asterisk:test
-    build:
-      context: .
-      dockerfile: Dockerfile.asterisk
-    networks:
-      main:
-        aliases:
-          - asterisk
-    volumes:
-      - ./asterisk:/etc/asterisk
-
-  db:
-    image: mariadb
-    environment:
-      MYSQL_DATABASE: 'opensips'
-      MYSQL_USER: 'opensips'
-      MYSQL_PASSWORD: 'opensips'
-      MYSQL_ROOT_PASSWORD: 'dbrootpw'
-    networks:
-      main:
-        aliases:
-          - db
-networks:
-  main:
+    network_mode: host

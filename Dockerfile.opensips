@@ -1,52 +1,20 @@
-FROM debian:buster
+FROM python:3.7-buster
 MAINTAINER Igor Olhovskiy <igorolhovskiy@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get install -y gnupg2 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B && \
-    echo "deb http://apt.opensips.org buster 3.0-releases" >/etc/apt/sources.list.d/opensips.list && \
+    curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg \
+    echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org buster 3.4-releases" >/etc/apt/sources.list.d/opensips.list \
     apt-get update -qq && \
-    apt-get install --assume-yes git \
-                    sngrep \
-                    netcat \
+    apt-get install --assume-yes \
                     opensips \
-                    opensips-b2bua-module \
-                    opensips-carrierroute-module \
-                    opensips-dialplan-module \
                     opensips-http-modules \
-                    opensips-json-module \
-                    opensips-lua-module \
-                    opensips-mysql-module \
-                    opensips-presence-modules \
-                    opensips-regex-module \
-                    opensips-sqlite-module \
-                    opensips-emergency-module \
-                    opensips-memcached-module \
-                    opensips-radius-modules \
-                    opensips-siprec-module \
-                    opensips-snmpstats-module \
                     opensips-tls-module \
+                    opensips-tls-openssl-module \
+                    opensips-regex-module \
                     opensips-wss-module \
-                    opensips-xmlrpc-module \
-                    opensips-dbhttp-module \
-                    opensips-identity-module \
-                    opensips-restclient-module \
-                    opensips-sctp-module \
                     opensips-compression-module \
-                    python3 \
-                    python3-pip \
-                    python3-dev \
-                    gcc \
-                    default-libmysqlclient-dev && \
-    pip3 install mysqlclient \
-                    sqlalchemy \
-                    sqlalchemy-utils \
-                    pyOpenSSL && \
-    git clone https://github.com/opensips/opensips-cli ~/src/opensips-cli && \
-    cd ~/src/opensips-cli && \
-    python3 setup.py install clean && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
