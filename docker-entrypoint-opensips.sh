@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Start OpenSIPS
-/usr/sbin/opensips -DD -E
+/usr/sbin/opensips -D
