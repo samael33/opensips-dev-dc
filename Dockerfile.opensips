@@ -17,8 +17,6 @@ RUN apt-get update && \
                     opensips-compression-module \
                     ssl-cert && \
     make-ssl-cert generate-default-snakeoil --force-overwrite && \
-    mv /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/opensips/tls && \
-    mv /etc/ssl/private/ssl-cert-snakeoil.key /etc/opensips/tls && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
