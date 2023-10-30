@@ -3,11 +3,11 @@ MAINTAINER Igor Olhovskiy <igorolhovskiy@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update \
-    && curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org buster 3.4-releases" > /etc/apt/sources.list.d/opensips.list \
-    && apt-get update -qq \
-    && apt-get install --assume-yes \
+RUN apt-get update && \
+    curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org buster 3.4-releases" > /etc/apt/sources.list.d/opensips.list && \
+    apt-get update -qq && \
+    apt-get install --assume-yes \
                     opensips \
                     opensips-http-modules \
                     opensips-tls-module \
@@ -15,15 +15,14 @@ RUN apt-get update \
                     opensips-regex-module \
                     opensips-wss-module \
                     opensips-compression-module \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-VOLUME /etc/opensips
+                    ssl-cert && \
+    make-ssl-cert generate-default-snakeoil --force-overwrite && \
+    mv /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/opensips/tls && \
+    mv /etc/ssl/private/ssl-cert-snakeoil.key /etc/opensips/tls && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/etc/opensips"]
-
-EXPOSE 5060/udp
-EXPOSE 5060/tcp
 
 ADD docker-entrypoint-opensips.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
