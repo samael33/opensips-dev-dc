@@ -5,4 +5,7 @@ Docker-compose file for developig for OpenSIPS as WebRTC proxy. OpenSIPS is stat
 ```bash
 openssl x509 -noout -text -in example.com.pem
 docker compose run --entrypoint /bin/bash opensips
+
+docker compose exec opensips /bin/bash
+> sngrep -L udp:127.0.0.1:8888 port 8888
 ```

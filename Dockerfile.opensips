@@ -15,6 +15,7 @@ RUN apt-get update && \
                     opensips-regex-module \
                     opensips-wss-module \
                     opensips-compression-module \
+                    sngrep \
                     ssl-cert && \
     make-ssl-cert generate-default-snakeoil --force-overwrite && \
     apt-get clean && \
