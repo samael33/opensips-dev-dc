@@ -16,6 +16,7 @@ RUN apt-get update && \
                     opensips-regex-module \
                     opensips-wss-module \
                     opensips-compression-module \
+                    opensips-python-module \
                     opensips-cli \
                     sngrep \
                     ssl-cert && \
