@@ -15,7 +15,7 @@ def get_logger(module_name, debug_level = logging.DEBUG):
     logger = logging.getLogger(module_name)
     logger.setLevel(debug_level)
     fh = logging.handlers.RotatingFileHandler(
-        f'/var/log/{module_name}.log',
+        '/var/log/' + module_name + '.log',
         mode='a',
         maxBytes=MAX_LOG_SIZE_BYTES,
         backupCount=LOG_FILE_BACKUP_COUNT

@@ -5,5 +5,5 @@ services:
       context: .
       dockerfile: Dockerfile.opensips
     volumes:
-      - ./opensips/opensips.cfg:/etc/opensips/opensips.cfg
+      - ./opensips:/etc/opensips
     network_mode: host

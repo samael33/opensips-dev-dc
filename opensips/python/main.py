@@ -1,4 +1,5 @@
-""" Test Python script.
+"""
+Test Python script.
 
 Called by OpenSIPS via python module
 python module documentation: https://opensips.org/docs/modules/3.4.x/python.html
@@ -7,7 +8,12 @@ This module merges functionalities of:
  - Push Notifications
 """
 
+# Import some libraries into runtime to test TLS
 import pn_client
+
+from requests_oauthlib import OAuth2Session
+from oauthlib.oauth2 import TokenExpiredError
+
 from utils import get_logger, OPENSIPS_SUCCESS_CODE, OPENSIPS_ERROR_CODE
 
 MODULE_NAME = 'python_opensips'
@@ -29,11 +35,10 @@ class PyOpensips:
 
     def child_init(self, rank):
         """Executed by ython module when a new worker process (child) is initialized by Opensips."""
-        logger.debug(f"{self.__class__.__name__}.child_init() called with rank {rank}, id {id(self)}")
         return OPENSIPS_SUCCESS_CODE
 
 
 def mod_init():
     """ Executed by python module when it is initialized by OpenSIPS."""
-    logger.debug(f"mod_init() called, returning PyOpensips script, dir {dir()}")
+    logger.debug("mod_init() called, returning PyOpensips script, dir {}".format(dir()))
     return PyOpensips()
