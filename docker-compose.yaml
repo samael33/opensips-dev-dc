@@ -1,6 +1,6 @@
 services:
   opensips:
-    image: opensips:webrtc
+    image: opensips:sslload
     build:
       context: .
       dockerfile: Dockerfile.opensips
