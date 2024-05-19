@@ -21,7 +21,8 @@ RUN apt-get update && \
                     sngrep \
                     ssl-cert && \
     make-ssl-cert generate-default-snakeoil --force-overwrite && \
-    python2 /etc/opensips/get-pip.py && \
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o /srv/get-pip.py && \
+    python2 /srv/get-pip.py && \
     pip2 install requests-oauthlib && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
